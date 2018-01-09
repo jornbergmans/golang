@@ -93,32 +93,28 @@ func thumbgen() {
 	infile := bufio.NewReader(os.Stdin)
 
 	cmdName := "/usr/bin/env"
-	// cmdArgument1 := []string{
-	// 	"ffmpeg",
-	// 	"-hide_banner", "-loglevel", "panic",
-	// 	"-y", "-i",
-	// }
-	cmdInput := fmt.Sprintln(infile)
-	// cmdArgument2 := []string{
-	// 	"-frames", "1", "-q", "5",
-	// 	"-vf", "\"mpdecimate,select=not(mod(n\\,2)),scale='480:-1',tile=",
-	// }
-	cmdFrameCount := fmt.Sprintln(outframes)
-	// cmdArgument3 := []string{
-	// 	"x1",
-	// 	"____OUTPUT____.png",
-	// }
-
-	cmdArguments := append([]string{
+	cmdArgumentHeader := []string{
 		"ffmpeg",
 		"-hide_banner", "-loglevel", "panic",
-		"-y", "-i"},
-		cmdInput,
+		"-y", "-i",
+	}
+	cmdInput := fmt.Sprintln(infile)
+	cmdArgumentRenderSettings := []string{
 		"-frames", "1", "-q", "5",
 		"-vf", "\"mpdecimate,select=not(mod(n\\,2)),scale='480:-1',tile=",
-		cmdFrameCount,
+	}
+	cmdFrameCount := fmt.Sprintln(outframes)
+	cmdArgumentOutput := []string{
 		"x1",
-		"____OUTPUT____.png")
+		"____OUTPUT____.png",
+	}
+
+	cmdArguments := []string{}
+	cmdArguments = append(cmdArguments, cmdArgumentHeader...)
+	cmdArguments = append(cmdArguments, cmdInput)
+	cmdArguments = append(cmdArguments, cmdArgumentRenderSettings...)
+	cmdArguments = append(cmdArguments, cmdFrameCount)
+	cmdArguments = append(cmdArguments, cmdArgumentOutput...)
 
 	// cmdArguments := []string{"ffmpeg", "-version"}
 	cmd := exec.Command(cmdName, cmdArguments...)
